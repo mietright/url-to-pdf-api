@@ -81,7 +81,7 @@ function getOptsFromQuery(query) {
       timeout: query['goto.timeout'],
       waitUntil: query['goto.waitUntil'],
       networkIdleInflight: query['goto.networkIdleInflight'],
-      networkIdleTimeout: query['goto.networkIdleTimeout'],
+      // networkIdleTimeout: query['goto.networkIdleTimeout'],
     },
     pdf: {
       scale: query['pdf.scale'],
