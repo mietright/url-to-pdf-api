@@ -10,7 +10,8 @@
     "start": "nodemon --watch ./src -e js src/index.js",
     "build": "babel src --out-dir dist",
     "test": "mocha --timeout 10000 && npm run lint",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prod:start": "node dist/index.js"
   },
   "repository": {
     "type": "git",

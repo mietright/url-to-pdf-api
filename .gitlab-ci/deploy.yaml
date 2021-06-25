@@ -1,0 +1,47 @@
+.deploy:
+  stage: deploy
+  variables:
+    APP: printer
+    DEPLOY_ENV: conny-staging
+    APP_VERSION: $CI_COMMIT_SHORT_SHA
+    GIT_BRANCH: $DEPLOY_ENV/$APP
+    GIT_ORG: mietright
+    GIT_DEPLOY_PROJECT: deployments
+    GIT_DEPLOY_REPO: $GIT_ORG/$GIT_DEPLOY_PROJECT
+    GIT_USER: ant31
+    GIT_EMAIL: 2t.antoine@gmail.com
+    TITLE: |
+      [$APP] Release $CI_COMMIT_SHORT_SHA to $DEPLOY_ENV
+    BODY: |
+      PR automatically created by the CI Pipeline: [$CI_PIPELINE_ID]($CI_PIPELINE_URL)
+      Triggered by: $GITHUB_REPO@$CI_COMMIT_SHA
+
+      ---
+
+      Commit title:   $CI_COMMIT_TITLE
+      Commit message: $CI_COMMIT_MESSAGE
+      Commit ref:     $CI_COMMIT_REF_NAME
+      Commit author:  $CI_COMMIT_AUTHOR
+
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "auto-deploy"'
+  image: img.conny.dev/oss/kubectl-kustomize:latest
+  before_script:
+    - echo $IMAGE
+    - echo $GIT_BRANCH
+    - git config --global user.email "$GIT_EMAIL"
+    - git config --global user.name "$GIT_USER"
+    - git clone "https://$GITHUB_TOKEN@github.com/$GIT_DEPLOY_REPO.git"
+    - cd deployments
+    - git checkout -b $GIT_BRANCH/$APP_VERSION
+    - cd envs/$DEPLOY_ENV/$APP
+  script:
+    - kustomize edit set image $IMAGE_NAME:$APP_VERSION
+    - git commit -a -m "$TITLE"
+    - git push origin --set-upstream -f $GIT_BRANCH/$APP_VERSION
+    - |
+        gh pr create --title "$TITLE" --body "$BODY" -B master --head "$GIT_ORG:$GIT_BRANCH/$APP_VERSION" -l "env/$DEPLOY_ENV" -l "app/$APP"
+    - gh pr merge $GIT_BRANCH/$APP_VERSION -s
+  tags:
+    - kubernetes
