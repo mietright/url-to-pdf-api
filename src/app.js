@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const compression = require('compression');
+const promBundle = require('express-prom-bundle');
 const cors = require('cors');
 const logger = require('./util/logger')(__filename);
 const errorResponder = require('./middleware/error-responder');
@@ -47,6 +48,9 @@ function createApp() {
   // Initialize routes
   const router = createRouter();
   app.use('/', router);
+
+  const metricsMiddleware = promBundle({ includeMethod: true, includePath: true });
+  app.use(metricsMiddleware);
 
   app.use(errorLogger());
   app.use(errorResponder());
