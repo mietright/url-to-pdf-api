@@ -7,7 +7,7 @@
     "node": "16.x.x"
   },
   "scripts": {
-    "start": "nodemon --watch ./src -e js src/index.js",
+    "start": "env-cmd nodemon --watch ./src -e js src/index.js",
     "build": "babel src --out-dir dist",
     "test": "mocha --timeout 10000 && npm run lint",
     "lint": "eslint .",
@@ -32,10 +32,12 @@
     "express-prom-bundle": "^6.3.6",
     "express-validation": "^1.0.2",
     "joi": "^11.1.1",
-    "lodash": "^4.17.4",
-    "morgan": "^1.9.0",
+    "lodash": "^4.17.15",
+    "morgan": "^1.9.1",
     "prom-client": "^13.1.0",
-    "puppeteer": "^1.8.0",
+    "normalize-url": "^5.0.0",
+    "pdf-parse": "^1.1.1",
+    "puppeteer": "^2.0.0",
     "server-destroy": "^1.0.1",
     "winston": "^2.3.1"
   },
@@ -47,6 +49,7 @@
     "@babel/register": "^7.7.0",
     "babel-polyfill": "^6.26.0",
     "chai": "^4.1.2",
+    "env-cmd": "^9.0.1",
     "eslint": "^4.8.0",
     "eslint-config-airbnb-base": "^12.0.2",
     "eslint-plugin-import": "^2.7.0",
