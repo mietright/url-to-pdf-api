@@ -6,7 +6,6 @@ RUN apk add --no-cache \
       zip \
       ttf-freefont \
       ttf-opensans \
-      ttf-ubuntu-font-family \
       ttf-inconsolata \
       ttf-liberation \
       ttf-dejavu \
