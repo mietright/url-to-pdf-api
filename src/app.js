@@ -53,12 +53,13 @@ function createApp() {
     threshold: 10,
   }));
 
+  // Add the metrics collector before the routes otherwise they won't be measured.
+  const metricsMiddleware = promBundle({ includeMethod: true, includePath: true });
+  app.use(metricsMiddleware);
+
   // Initialize routes
   const router = createRouter();
   app.use('/', router);
-
-  const metricsMiddleware = promBundle({ includeMethod: true, includePath: true });
-  app.use(metricsMiddleware);
 
   app.use(errorLogger());
   app.use(errorResponder());
