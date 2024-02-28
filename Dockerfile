@@ -15,7 +15,8 @@ RUN apk add --no-cache \
       freetype-dev \
       harfbuzz \
       ca-certificates \
-      ttf-freefont
+      ttf-freefont \
+      dumb-init
 
 # Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
@@ -35,4 +36,4 @@ RUN yarn build
 
 EXPOSE 9000
 
-CMD [ "node", "dist/index.js" ]
+CMD [ "dumb-init", "node", "dist/index.js" ]
