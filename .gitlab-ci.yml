@@ -26,7 +26,7 @@ variables:
   IMAGE_NAME: $OCI_REPO/conny/printer
   APPNAME: printer
   APP: printer
-  DEFAULT_TAG: v.$CI_COMMIT_REF_SLUG
+  DEFAULT_TAG: $CI_COMMIT_SHORT_SHA
   ### Printer
   NODE_ENV: development
   PORT: 9000
@@ -37,13 +37,13 @@ variables:
 build image:
   extends: .build-container
   variables:
-    TAG: v.$CI_COMMIT_REF_SLUG
+    TAG: $DEFAULT_TAG
   stage: build
 
 # RUN TEST
 unit test:
   image:
-    name: $IMAGE_NAME:v.$CI_COMMIT_REF_SLUG
+    name: $IMAGE_NAME:$DEFAULT_TAG
   needs:
     - "build image"
   cache:
@@ -61,13 +61,19 @@ unit test:
 
 # TAGS IMAGES
 image tag:
+  needs:
+    - build image
   extends: .tag-main
   variables:
-    SOURCE_TAG: v.$CI_COMMIT_REF_SLUG
+    SOURCE_TAG: $DEFAULT_TAG
 
 
 deploy-staging:
+  needs:
+    - image tag
   extends: .deploy-staging
 
 deploy-production:
+  needs:
+    - image tag
   extends: .deploy-production
