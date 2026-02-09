@@ -92,7 +92,7 @@ yarn audit:
   variables:
     GIT_STRATEGY: none
   script:
-    - cd /app
+    - cd /usr/src/app
     - yarn install --frozen-lockfile
     - bin/yarn_audit
   allow_failure: false
