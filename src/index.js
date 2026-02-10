@@ -1,5 +1,3 @@
-require('core-js/stable');
-require('regenerator-runtime/runtime');
 const createApp = require('./app');
 const enableDestroy = require('server-destroy');
 const logger = require('./util/logger')(__filename);

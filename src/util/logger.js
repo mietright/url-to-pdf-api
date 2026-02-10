@@ -30,11 +30,4 @@ function createLogger(filePath) {
   return logger;
 }
 
-function _setLevelForTransports(logger, level) {
-  logger.level = level;
-  _.each(logger.transports, (transport) => {
-    transport.level = level;
-  });
-}
-
 module.exports = createLogger;
