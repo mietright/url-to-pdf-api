@@ -2,9 +2,15 @@
   "name": "url-to-pdf-api",
   "version": "1.0.0",
   "description": "Web page PDF rendering done right. Packaged to an easy API.",
+  "resolutions": {
+    "diff": "^8.0.3"
+  },
+  "overrides": {
+    "diff": "^8.0.3"
+  },
   "main": "src/index.js",
   "engines": {
-    "node": "16.x.x"
+    "node": ">=24.x.x"
   },
   "scripts": {
     "start": "env-cmd nodemon --watch ./src -e js src/index.js",
@@ -25,36 +31,36 @@
   "homepage": "https://github.com/alvarcarto/url-to-pdf-api#readme",
   "dependencies": {
     "bluebird": "^3.5.0",
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.20.3",
     "compression": "^1.7.1",
     "cors": "^2.8.4",
-    "express": "^4.15.5",
+    "express": "^4.21.2",
     "express-prom-bundle": "^6.3.6",
-    "express-validation": "^1.0.2",
-    "joi": "^11.1.1",
-    "lodash": "^4.17.15",
+    "express-validation": "^4.1.1",
+    "joi": "^17.13.3",
+    "lodash": "^4.17.21",
     "morgan": "^1.9.1",
     "prom-client": "^13.1.0",
     "normalize-url": "^5.0.0",
     "pdf-parse": "^1.1.1",
-    "puppeteer": "^2.0.0",
+    "puppeteer": "^23.11.1",
     "server-destroy": "^1.0.1",
     "winston": "^2.3.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.7.0",
-    "@babel/core": "^7.7.2",
-    "@babel/node": "^7.7.0",
-    "@babel/preset-env": "^7.7.1",
-    "@babel/register": "^7.7.0",
+    "@babel/cli": "^7.26.10",
+    "@babel/core": "^7.26.10",
+    "@babel/node": "^7.26.10",
+    "@babel/preset-env": "^7.26.10",
+    "@babel/register": "^7.26.10",
     "babel-polyfill": "^6.26.0",
-    "chai": "^4.1.2",
-    "env-cmd": "^9.0.1",
-    "eslint": "^4.8.0",
-    "eslint-config-airbnb-base": "^12.0.2",
-    "eslint-plugin-import": "^2.7.0",
-    "mocha": "^9.1.1",
-    "nodemon": "^2.0.12",
-    "supertest": "^3.0.0"
+    "chai": "^5.1.2",
+    "env-cmd": "^10.1.0",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "mocha": "^11.0.2",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
   }
 }

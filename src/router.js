@@ -1,15 +1,21 @@
 const _ = require('lodash');
-const validate = require('express-validation');
+const { validate } = require('express-validation');
 const express = require('express');
 const render = require('./http/render-http');
 const config = require('./config');
 const logger = require('./util/logger')(__filename);
-const { renderQuerySchema, renderBodySchema, sharedQuerySchema } = require('./util/validation');
+const {
+  renderQuerySchema,
+  renderBodySchema,
+  sharedQuerySchema,
+} = require('./util/validation');
 
 function createRouter() {
   const router = express.Router();
 
-  router.get('/health', (req, res) => { res.send('ok') })
+  router.get('/health', (req, res) => {
+    res.send('ok');
+  });
 
   if (!_.isEmpty(config.API_TOKENS)) {
     logger.info('x-api-key authentication required');
@@ -28,28 +34,28 @@ function createRouter() {
     logger.warn('Warning: no authentication required to use the API');
   }
 
-  const getRenderSchema = {
-    query: renderQuerySchema,
-    options: {
-      allowUnknownBody: false,
-      allowUnknownQuery: false,
-    },
-  };
-  router.get('/api/render', validate(getRenderSchema), render.getRender);
+  router.get(
+    '/api/render',
+    validate({ query: renderQuerySchema }),
+    render.getRender,
+  );
 
   const postRenderSchema = {
     body: renderBodySchema,
     query: sharedQuerySchema,
-    options: {
-      allowUnknownBody: false,
-      allowUnknownQuery: false,
-
-      // Without this option, text body causes an error
-      // https://github.com/AndrewKeig/express-validation/issues/36
-      contextRequest: true,
-    },
   };
-  router.post('/api/render', validate(postRenderSchema), render.postRender);
+
+  // Without this option, text body causes an error
+  // https://github.com/AndrewKeig/express-validation/issues/36
+  const postRenderOptions = {
+    context: true,
+  };
+
+  router.post(
+    '/api/render',
+    validate(postRenderSchema, postRenderOptions),
+    render.postRender,
+  );
 
   router.get('/healthcheck', (req, res) => res.status(200).send('OK'));
 

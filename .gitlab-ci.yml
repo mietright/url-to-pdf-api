@@ -14,6 +14,9 @@ include:
   - project: 'connylegal/mietright_deployments'
     ref: main
     file: '/.gitlab-ci/deploy.yaml'
+  - project: 'connylegal/mietright_deployments'
+    ref: main
+    file: '/.gitlab-ci/trivy.yaml'
 
 cache:
   key: $CI_COMMIT_REF_SLUG
@@ -35,7 +38,7 @@ variables:
 
 # BUILD IMAGE
 build image:
-  extends: .build-container
+  extends: .build-container-branch
   variables:
     TAG: $DEFAULT_TAG
   stage: build
@@ -58,6 +61,43 @@ unit test:
   tags:
     - kubernetes
 
+# ---------------------------------------------------------------------------
+# TRIVY SCANNERS (Filesystem only, Parallel, Table Output)
+# ---------------------------------------------------------------------------
+# 1. Vulnerabilities Scanner
+trivy-vuln:
+  extends: .trivy-vuln
+  variables:
+    TRIVY_SEVERITY: 'HIGH,CRITICAL'
+  allow_failure: false
+# 2. Misconfiguration Scanner (IaC)
+trivy-misconfig:
+  extends: .trivy-misconfig
+  variables:
+    TRIVY_SEVERITY: 'HIGH,CRITICAL'
+  allow_failure: true
+# 3. License Scanner
+trivy-license:
+  extends: .trivy-license
+  variables:
+    TRIVY_SEVERITY: 'HIGH,CRITICAL'
+  allow_failure: false
+
+yarn audit:
+  image:
+    name: $IMAGE_NAME:$DEFAULT_TAG
+  stage: test
+  needs:
+    - build image
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - cd /usr/src/app
+    - yarn install --frozen-lockfile
+    - bin/yarn_audit
+  allow_failure: false
+  tags:
+    - kubernetes
 
 # TAGS IMAGES
 image tag:
