@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const _ = require('lodash');
+const os = require('os');
 const config = require('../config');
 const logger = require('../util/logger')(__filename);
 
@@ -18,7 +19,7 @@ async function createBrowser(opts) {
   }
   browserOpts.headless = !config.DEBUG_MODE;
   browserOpts.args = ['--no-sandbox', '--disable-setuid-sandbox'];
-  if (!opts.enableGPU || navigator.userAgent.indexOf('Win') !== -1) {
+  if (!opts.enableGPU || os.platform() === 'win32') {
     browserOpts.args.push('--disable-gpu');
   }
   return puppeteer.launch(browserOpts);
