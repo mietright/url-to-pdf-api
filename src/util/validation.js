@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const { Joi } = require('express-validation');
 
 const urlSchema = Joi.string().uri({
   scheme: [

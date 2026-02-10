@@ -1,13 +1,9 @@
+require('core-js/stable');
+require('regenerator-runtime/runtime');
 const createApp = require('./app');
 const enableDestroy = require('server-destroy');
-const BPromise = require('bluebird');
 const logger = require('./util/logger')(__filename);
 const config = require('./config');
-
-BPromise.config({
-  warnings: config.NODE_ENV !== 'production',
-  longStackTraces: true,
-});
 
 const app = createApp();
 const server = app.listen(config.PORT, () => {

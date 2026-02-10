@@ -8,21 +8,31 @@ const COLORIZE = config.NODE_ENV === 'development';
 function createLogger(filePath) {
   const fileName = path.basename(filePath);
 
-  const logger = new winston.Logger({
-    transports: [new winston.transports.Console({
-      colorize: COLORIZE,
-      label: fileName,
-      timestamp: true,
-    })],
+  const logger = winston.createLogger({
+    level: config.LOG_LEVEL || 'info',
+    transports: [
+      new winston.transports.Console({
+        format: winston.format.combine(
+          winston.format.label({ label: fileName }),
+          winston.format.timestamp(),
+          COLORIZE ? winston.format.colorize() : winston.format.simple(),
+          winston.format.printf((info) => {
+            const {
+              timestamp, label, level, message,
+            } = info;
+            return `${timestamp} [${label}] ${level}: ${message}`;
+          })
+        ),
+      }),
+    ],
   });
 
-  _setLevelForTransports(logger, config.LOG_LEVEL || 'info');
   return logger;
 }
 
 function _setLevelForTransports(logger, level) {
+  logger.level = level;
   _.each(logger.transports, (transport) => {
-    // eslint-disable-next-line
     transport.level = level;
   });
 }
