@@ -108,7 +108,7 @@ async function render(_opts = {}) {
     await page.setViewport(opts.viewport);
     if (opts.emulateScreenMedia) {
       logger.info('Emulate @media screen..');
-      await page.emulateMedia('screen');
+      await page.emulateMediaType('screen');
     }
 
     if (opts.cookies && opts.cookies.length > 0) {
@@ -130,7 +130,11 @@ async function render(_opts = {}) {
 
     if (_.isNumber(opts.waitFor) || _.isString(opts.waitFor)) {
       logger.info(`Wait for ${opts.waitFor} ..`);
-      await page.waitFor(opts.waitFor);
+      if (_.isNumber(opts.waitFor)) {
+        await page.waitForTimeout(opts.waitFor);
+      } else {
+        await page.waitForSelector(opts.waitFor);
+      }
     }
 
     if (opts.scrollPage) {
