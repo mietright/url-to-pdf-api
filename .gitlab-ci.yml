@@ -38,7 +38,7 @@ variables:
 
 # BUILD IMAGE
 build image:
-  extends: .build-container
+  extends: .build-container-branch
   variables:
     TAG: $DEFAULT_TAG
   stage: build
