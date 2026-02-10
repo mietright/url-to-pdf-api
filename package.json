@@ -10,7 +10,7 @@
   },
   "main": "src/index.js",
   "engines": {
-    "node": ">=16.x.x"
+    "node": ">=24.x.x"
   },
   "scripts": {
     "start": "env-cmd nodemon --watch ./src -e js src/index.js",
