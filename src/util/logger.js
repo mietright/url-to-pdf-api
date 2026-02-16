@@ -17,9 +17,7 @@ function createLogger(filePath) {
           winston.format.timestamp(),
           COLORIZE ? winston.format.colorize() : winston.format.simple(),
           winston.format.printf((info) => {
-            const {
-              timestamp, label, level, message,
-            } = info;
+            const { timestamp, label, level, message } = info;
             return `${timestamp} [${label}] ${level}: ${message}`;
           }),
         ),

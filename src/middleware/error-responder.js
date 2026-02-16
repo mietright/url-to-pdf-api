@@ -16,7 +16,7 @@ function createErrorResponder(_opts) {
   // eslint-disable-next-line
   return function errorResponder(err, req, res, next) {
     let message;
-    const status = err.status ? err.status : 500;
+    const status = err.status || err.statusCode || 500;
 
     const httpMessage = http.STATUS_CODES[status];
     if (opts.isErrorSafeToRespond(status)) {

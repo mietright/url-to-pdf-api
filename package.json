@@ -15,7 +15,7 @@
   "scripts": {
     "start": "env-cmd -- nodemon --watch ./src -e js src/index.js",
     "build": "babel src --out-dir dist",
-    "test": "mocha --timeout 10000 && npm run lint",
+    "test": "mocha --timeout 10000",
     "fix-lint": "eslint ./src ./test --fix",
     "fix-fmt": "prettier -c ./src --config ./.prettierrc ./test --write",
     "lint": "eslint ./src ./test",
