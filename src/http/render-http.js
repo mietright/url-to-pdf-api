@@ -34,9 +34,7 @@ const getRender = ex.createRoute((req, res) => {
       res.attachment(opts.attachmentName);
     }
     res.set('content-type', getMimeType(opts));
-    if (opts.output === 'html') {
-      res.send(data);
-    }
+    res.send(data);
   });
 });
 
@@ -74,9 +72,7 @@ const postRender = ex.createRoute((req, res) => {
       res.attachment(opts.attachmentName);
     }
     res.set('content-type', getMimeType(opts));
-    if (opts.output === 'html') {
-      res.send(data);
-    }
+    res.send(data);
   });
 });
 
