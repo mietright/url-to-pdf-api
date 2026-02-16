@@ -18,6 +18,9 @@ async function createBrowser(opts) {
   }
   browserOpts.headless = !config.DEBUG_MODE;
   browserOpts.args = ['--no-sandbox', '--disable-setuid-sandbox'];
+  if (opts.ignoreHttpsErrors) {
+    browserOpts.args.push('--ignore-certificate-errors');
+  }
   if (!opts.enableGPU || os.platform() === 'win32') {
     browserOpts.args.push('--disable-gpu');
   }
