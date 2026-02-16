@@ -136,7 +136,9 @@ async function render(_opts = {}) {
     if (_.isNumber(opts.waitFor) || _.isString(opts.waitFor)) {
       logger.info(`Wait for ${opts.waitFor} ..`);
       if (_.isNumber(opts.waitFor)) {
-        await new Promise((resolve) => setTimeout(resolve, opts.waitFor));
+        await new Promise((resolve) => {
+          setTimeout(resolve, opts.waitFor);
+        });
       } else {
         await page.waitForSelector(opts.waitFor);
       }
@@ -241,7 +243,6 @@ async function scrollPage(page) {
         if (document.body.scrollHeight - bottomPos() < bottomThreshold) {
           window.scrollTo(0, 0);
           setTimeout(resolve, 500);
-          return;
         }
 
         setTimeout(scrollDown, scrollInterval);

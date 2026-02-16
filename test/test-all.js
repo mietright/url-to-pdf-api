@@ -3,7 +3,7 @@
 const chai = require('chai');
 const fs = require('fs');
 const request = require('supertest');
-const { PDFParse: pdf } = require('pdf-parse');
+const { PDFParse } = require('pdf-parse');
 const { getResource } = require('./util');
 const createApp = require('../src/app');
 
@@ -19,7 +19,7 @@ function normalisePdfText(text) {
 }
 
 async function getPdfTextContent(buffer, opts = {}) {
-  const parser = new pdf({ data: buffer });
+  const parser = new PDFParse({ data: buffer });
   const result = await parser.getText();
   await parser.destroy();
 
