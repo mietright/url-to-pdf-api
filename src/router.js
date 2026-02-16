@@ -36,7 +36,7 @@ function createRouter() {
 
   router.get(
     '/api/render',
-    validate({ query: renderQuerySchema }),
+    validate({ query: renderQuerySchema }, { context: true }),
     render.getRender,
   );
 

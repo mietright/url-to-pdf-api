@@ -36,8 +36,6 @@ const getRender = ex.createRoute((req, res) => {
     res.set('content-type', getMimeType(opts));
     if (opts.output === 'html') {
       res.send(data);
-    } else {
-      res.end(data, 'binary');
     }
   });
 });
@@ -45,7 +43,8 @@ const getRender = ex.createRoute((req, res) => {
 const postRender = ex.createRoute((req, res) => {
   const isBodyJson = req.headers['content-type'].includes('application/json');
   if (isBodyJson) {
-    const hasContent = _.isString(_.get(req.body, 'url')) || _.isString(_.get(req.body, 'html'));
+    const hasContent =
+      _.isString(_.get(req.body, 'url')) || _.isString(_.get(req.body, 'html'));
     if (!hasContent) {
       ex.throwStatus(400, 'Body must contain url or html');
     }
@@ -77,8 +76,6 @@ const postRender = ex.createRoute((req, res) => {
     res.set('content-type', getMimeType(opts));
     if (opts.output === 'html') {
       res.send(data);
-    } else {
-      res.end(data, 'binary');
     }
   });
 });
@@ -140,49 +137,58 @@ function isUrlAllowed(inputUrl) {
 }
 
 function assertOptionsAllowed(opts) {
-  const isDisallowedHtmlInput = !_.isString(opts.url) && config.DISABLE_HTML_INPUT;
+  const isDisallowedHtmlInput =
+    !_.isString(opts.url) && config.DISABLE_HTML_INPUT;
   if (isDisallowedHtmlInput) {
     ex.throwStatus(403, 'Rendering HTML input is disabled.');
   }
 
   if (
-    _.isString(opts.url)
-    && config.ALLOW_URLS.length > 0
-    && !isUrlAllowed(opts.url)
+    _.isString(opts.url) &&
+    config.ALLOW_URLS.length > 0 &&
+    !isUrlAllowed(opts.url)
   ) {
     ex.throwStatus(403, 'Url not allowed.');
   }
+}
+
+function toBool(value) {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') {
+    return value.toLowerCase() === 'true';
+  }
+  return Boolean(value);
 }
 
 function getOptsFromQuery(query) {
   const opts = {
     url: query.url,
     attachmentName: query.attachmentName,
-    scrollPage: query.scrollPage,
-    emulateScreenMedia: query.emulateScreenMedia,
-    enableGPU: query.enableGPU,
-    ignoreHttpsErrors: query.ignoreHttpsErrors,
+    scrollPage: toBool(query.scrollPage),
+    emulateScreenMedia: toBool(query.emulateScreenMedia),
+    enableGPU: toBool(query.enableGPU),
+    ignoreHttpsErrors: toBool(query.ignoreHttpsErrors),
     waitFor: query.waitFor,
     output: query.output || 'pdf',
     viewport: {
       width: query['viewport.width'],
       height: query['viewport.height'],
       deviceScaleFactor: query['viewport.deviceScaleFactor'],
-      isMobile: query['viewport.isMobile'],
-      hasTouch: query['viewport.hasTouch'],
-      isLandscape: query['viewport.isLandscape'],
+      isMobile: toBool(query['viewport.isMobile']),
+      hasTouch: toBool(query['viewport.hasTouch']),
+      isLandscape: toBool(query['viewport.isLandscape']),
     },
     goto: {
       timeout: query['goto.timeout'],
       waitUntil: query['goto.waitUntil'],
     },
     pdf: {
-      fullPage: query['pdf.fullPage'],
+      fullPage: toBool(query['pdf.fullPage']),
       scale: query['pdf.scale'],
-      displayHeaderFooter: query['pdf.displayHeaderFooter'],
+      displayHeaderFooter: toBool(query['pdf.displayHeaderFooter']),
       footerTemplate: query['pdf.footerTemplate'],
       headerTemplate: query['pdf.headerTemplate'],
-      landscape: query['pdf.landscape'],
+      landscape: toBool(query['pdf.landscape']),
       pageRanges: query['pdf.pageRanges'],
       format: query['pdf.format'],
       width: query['pdf.width'],
@@ -193,10 +199,10 @@ function getOptsFromQuery(query) {
         bottom: query['pdf.margin.bottom'],
         left: query['pdf.margin.left'],
       },
-      printBackground: query['pdf.printBackground'],
+      printBackground: toBool(query['pdf.printBackground']),
     },
     screenshot: {
-      fullPage: query['screenshot.fullPage'],
+      fullPage: toBool(query['screenshot.fullPage']),
       quality: query['screenshot.quality'],
       type: query['screenshot.type'] || 'png',
       clip: {
@@ -206,7 +212,7 @@ function getOptsFromQuery(query) {
         height: query['screenshot.clip.height'],
       },
       selector: query['screenshot.selector'],
-      omitBackground: query['screenshot.omitBackground'],
+      omitBackground: toBool(query['screenshot.omitBackground']),
     },
   };
   return opts;
