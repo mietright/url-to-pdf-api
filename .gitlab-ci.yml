@@ -42,6 +42,8 @@ build image:
   variables:
     TAG: $DEFAULT_TAG
   stage: build
+  tags:
+    - kubernetes
 
 # RUN TEST
 unit test:
@@ -69,18 +71,24 @@ trivy-vuln:
   variables:
     TRIVY_SEVERITY: 'HIGH,CRITICAL'
   allow_failure: false
+  tags:
+    - kubernetes
 # 2. Misconfiguration Scanner (IaC)
 trivy-misconfig:
   extends: .trivy-misconfig
   variables:
     TRIVY_SEVERITY: 'HIGH,CRITICAL'
   allow_failure: true
+  tags:
+    - kubernetes
 # 3. License Scanner
 trivy-license:
   extends: .trivy-license
   variables:
     TRIVY_SEVERITY: 'HIGH,CRITICAL'
   allow_failure: false
+  tags:
+    - kubernetes
 
 yarn audit:
   image:
@@ -120,13 +128,39 @@ image tag:
   extends: .tag-main
   variables:
     SOURCE_TAG: $DEFAULT_TAG
+  only:
+    refs:
+      - main
+      - master
+  tags:
+    - kubernetes
 
 deploy-staging:
   needs:
     - image tag
   extends: .deploy-staging
+  only:
+    refs:
+      - main
+      - master
+  tags:
+    - kubernetes
 
 deploy-production:
   needs:
     - image tag
   extends: .deploy-production
+  only:
+    refs:
+      - main
+      - master
+  tags:
+    - kubernetes
+
+deploy-pr-staging:
+  stage: test
+  needs:
+    - build image
+  extends: .deploy-pr-staging
+  tags:
+    - kubernetes
