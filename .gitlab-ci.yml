@@ -130,3 +130,11 @@ deploy-production:
   needs:
     - image tag
   extends: .deploy-production
+
+deploy-pr-staging:
+  stage: test
+  needs:
+    - build image
+  extends: .deploy-pr-staging
+  tags:
+    - kubernetes
