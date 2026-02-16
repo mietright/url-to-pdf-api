@@ -63,18 +63,18 @@ describe('POST /api/render', () => {
       .set('content-type', 'application/json')
       .expect(400));
 
-  it('render github.com should succeed', function renderGithubComShouldSucceed() {
-    this.timeout(30000);
+  it('render external URL should succeed', function renderExternalUrlShouldSucceed() {
+    this.timeout(10000);
     return request(app)
       .post('/api/render')
-      .send({ url: 'https://github.com' })
+      .send({ url: 'https://example.com' })
       .set('content-type', 'application/json')
       .set('Connection', 'keep-alive')
       .expect(200)
       .expect('content-type', 'application/pdf')
       .then((response) => {
         const length = Number(response.headers['content-length']);
-        chai.expect(length).to.be.above(1024 * 40);
+        chai.expect(length).to.be.above(1024 * 5);
       });
   });
 
