@@ -9,15 +9,19 @@ const config = require('../config');
 function getMimeType(opts) {
   if (opts.output === 'pdf') {
     return 'application/pdf';
-  } else if (opts.output === 'html') {
+  }
+  if (opts.output === 'html') {
     return 'text/html';
   }
 
   const type = _.get(opts, 'screenshot.type');
   switch (type) {
-    case 'png': return 'image/png';
-    case 'jpeg': return 'image/jpeg';
-    default: throw new Error(`Unknown screenshot type: ${type}`);
+    case 'png':
+      return 'image/png';
+    case 'jpeg':
+      return 'image/jpeg';
+    default:
+      throw new Error(`Unknown screenshot type: ${type}`);
   }
 }
 
@@ -25,24 +29,20 @@ const getRender = ex.createRoute((req, res) => {
   const opts = getOptsFromQuery(req.query);
 
   assertOptionsAllowed(opts);
-  return renderCore.render(opts)
-    .then((data) => {
-      if (opts.attachmentName) {
-        res.attachment(opts.attachmentName);
-      }
-      res.set('content-type', getMimeType(opts));
-      if (opts.output === 'html') {
-        res.send(data);
-      } else {
-        res.end(data, 'binary');
-      }
-    });
+  return renderCore.render(opts).then((data) => {
+    if (opts.attachmentName) {
+      res.attachment(opts.attachmentName);
+    }
+    res.set('content-type', getMimeType(opts));
+    res.send(data);
+  });
 });
 
 const postRender = ex.createRoute((req, res) => {
   const isBodyJson = req.headers['content-type'].includes('application/json');
   if (isBodyJson) {
-    const hasContent = _.isString(_.get(req.body, 'url')) || _.isString(_.get(req.body, 'html'));
+    const hasContent =
+      _.isString(_.get(req.body, 'url')) || _.isString(_.get(req.body, 'html'));
     if (!hasContent) {
       ex.throwStatus(400, 'Body must contain url or html');
     }
@@ -52,30 +52,28 @@ const postRender = ex.createRoute((req, res) => {
 
   let opts;
   if (isBodyJson) {
-    opts = _.merge({
-      output: 'pdf',
-      screenshot: {
-        type: 'png',
+    opts = _.merge(
+      {
+        output: 'pdf',
+        screenshot: {
+          type: 'png',
+        },
       },
-    }, req.body);
+      req.body,
+    );
   } else {
     opts = getOptsFromQuery(req.query);
     opts.html = req.body;
   }
 
   assertOptionsAllowed(opts);
-  return renderCore.render(opts)
-    .then((data) => {
-      if (opts.attachmentName) {
-        res.attachment(opts.attachmentName);
-      }
-      res.set('content-type', getMimeType(opts));
-      if (opts.output === 'html') {
-        res.send(data);
-      } else {
-        res.end(data, 'binary');
-      }
-    });
+  return renderCore.render(opts).then((data) => {
+    if (opts.attachmentName) {
+      res.attachment(opts.attachmentName);
+    }
+    res.set('content-type', getMimeType(opts));
+    res.send(data);
+  });
 });
 
 function isHostMatch(host1, host2) {
@@ -113,18 +111,21 @@ function isUrlAllowed(inputUrl) {
   const matchInfos = _.map(config.ALLOW_URLS, (urlPattern) => {
     if (_.startsWith(urlPattern, 'host:')) {
       return isHostMatch(urlPattern.split(':')[1], urlParts.host);
-    } else if (_.startsWith(urlPattern, 'regex:')) {
+    }
+    if (_.startsWith(urlPattern, 'regex:')) {
       return isRegexMatch(urlPattern.split(':')[1], inputUrl);
     }
 
     return isNormalizedMatch(urlPattern, inputUrl);
   });
 
-  const isAllowed = _.some(matchInfos, info => info.match);
+  const isAllowed = _.some(matchInfos, (info) => info.match);
   if (!isAllowed) {
     logger.info('The url was not allowed because:');
     _.forEach(matchInfos, (info) => {
-      logger.info(`${info.part1} !== ${info.part2} (with ${info.type} matching)`);
+      logger.info(
+        `${info.part1} !== ${info.part2} (with ${info.type} matching)`,
+      );
     });
   }
 
@@ -132,45 +133,58 @@ function isUrlAllowed(inputUrl) {
 }
 
 function assertOptionsAllowed(opts) {
-  const isDisallowedHtmlInput = !_.isString(opts.url) && config.DISABLE_HTML_INPUT;
+  const isDisallowedHtmlInput =
+    !_.isString(opts.url) && config.DISABLE_HTML_INPUT;
   if (isDisallowedHtmlInput) {
     ex.throwStatus(403, 'Rendering HTML input is disabled.');
   }
 
-  if (_.isString(opts.url) && config.ALLOW_URLS.length > 0 && !isUrlAllowed(opts.url)) {
+  if (
+    _.isString(opts.url) &&
+    config.ALLOW_URLS.length > 0 &&
+    !isUrlAllowed(opts.url)
+  ) {
     ex.throwStatus(403, 'Url not allowed.');
   }
+}
+
+function toBool(value) {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') {
+    return value.toLowerCase() === 'true';
+  }
+  return Boolean(value);
 }
 
 function getOptsFromQuery(query) {
   const opts = {
     url: query.url,
     attachmentName: query.attachmentName,
-    scrollPage: query.scrollPage,
-    emulateScreenMedia: query.emulateScreenMedia,
-    enableGPU: query.enableGPU,
-    ignoreHttpsErrors: query.ignoreHttpsErrors,
+    scrollPage: toBool(query.scrollPage),
+    emulateScreenMedia: toBool(query.emulateScreenMedia),
+    enableGPU: toBool(query.enableGPU),
+    ignoreHttpsErrors: toBool(query.ignoreHttpsErrors),
     waitFor: query.waitFor,
     output: query.output || 'pdf',
     viewport: {
       width: query['viewport.width'],
       height: query['viewport.height'],
       deviceScaleFactor: query['viewport.deviceScaleFactor'],
-      isMobile: query['viewport.isMobile'],
-      hasTouch: query['viewport.hasTouch'],
-      isLandscape: query['viewport.isLandscape'],
+      isMobile: toBool(query['viewport.isMobile']),
+      hasTouch: toBool(query['viewport.hasTouch']),
+      isLandscape: toBool(query['viewport.isLandscape']),
     },
     goto: {
       timeout: query['goto.timeout'],
       waitUntil: query['goto.waitUntil'],
     },
     pdf: {
-      fullPage: query['pdf.fullPage'],
+      fullPage: toBool(query['pdf.fullPage']),
       scale: query['pdf.scale'],
-      displayHeaderFooter: query['pdf.displayHeaderFooter'],
+      displayHeaderFooter: toBool(query['pdf.displayHeaderFooter']),
       footerTemplate: query['pdf.footerTemplate'],
       headerTemplate: query['pdf.headerTemplate'],
-      landscape: query['pdf.landscape'],
+      landscape: toBool(query['pdf.landscape']),
       pageRanges: query['pdf.pageRanges'],
       format: query['pdf.format'],
       width: query['pdf.width'],
@@ -181,10 +195,10 @@ function getOptsFromQuery(query) {
         bottom: query['pdf.margin.bottom'],
         left: query['pdf.margin.left'],
       },
-      printBackground: query['pdf.printBackground'],
+      printBackground: toBool(query['pdf.printBackground']),
     },
     screenshot: {
-      fullPage: query['screenshot.fullPage'],
+      fullPage: toBool(query['screenshot.fullPage']),
       quality: query['screenshot.quality'],
       type: query['screenshot.type'] || 'png',
       clip: {
@@ -194,7 +208,7 @@ function getOptsFromQuery(query) {
         height: query['screenshot.clip.height'],
       },
       selector: query['screenshot.selector'],
-      omitBackground: query['screenshot.omitBackground'],
+      omitBackground: toBool(query['screenshot.omitBackground']),
     },
   };
   return opts;

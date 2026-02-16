@@ -324,8 +324,9 @@ even 2GB of RAM.*
 
 First, clone the repository and cd into it.
 
-* `cp .env.sample .env`
-* Fill in the blanks in `.env`
+For env-cmd v11+ local development:
+* `cp .env-cmdrc.example.json .env-cmdrc.json`
+* Fill in the blanks in `.env-cmdrc.json`
 
 * `npm install`
 * `npm start` Start express server locally

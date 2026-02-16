@@ -1,5 +1,4 @@
 const _ = require('lodash');
-const BPromise = require('bluebird');
 
 // Route which assumes that the Promise `func` returns, will be resolved
 // with data which will be sent as json response.
@@ -28,12 +27,12 @@ function createRoute(func, responseHandler) {
       let valuePromise = callback();
       if (!_.isFunction(_.get(valuePromise, 'then'))) {
         // It was a not a Promise, so wrap it as a Promise
-        valuePromise = BPromise.resolve(valuePromise);
+        valuePromise = Promise.resolve(valuePromise);
       }
 
       if (_.isFunction(responseHandler)) {
         valuePromise
-          .then(data => responseHandler(data, req, res, next))
+          .then((data) => responseHandler(data, req, res, next))
           .catch(next);
       } else {
         valuePromise.catch(next);

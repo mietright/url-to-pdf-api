@@ -13,7 +13,7 @@ function createErrorLogger(_opts) {
   );
 
   return function errorHandler(err, req, res, next) {
-    const status = err.status ? err.status : 500;
+    const status = err.status || err.statusCode || 500;
     const logLevel = getLogLevel(status);
     const log = logger[logLevel];
 

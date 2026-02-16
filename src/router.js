@@ -20,7 +20,7 @@ function createRouter() {
   if (!_.isEmpty(config.API_TOKENS)) {
     logger.info('x-api-key authentication required');
 
-    router.use('/*', (req, res, next) => {
+    router.use('/*splat', (req, res, next) => {
       const userToken = req.headers['x-api-key'];
       if (!_.includes(config.API_TOKENS, userToken)) {
         const err = new Error('Invalid API token in x-api-key header.');
@@ -36,7 +36,7 @@ function createRouter() {
 
   router.get(
     '/api/render',
-    validate({ query: renderQuerySchema }),
+    validate({ query: renderQuerySchema }, { context: true }),
     render.getRender,
   );
 
@@ -45,8 +45,6 @@ function createRouter() {
     query: sharedQuerySchema,
   };
 
-  // Without this option, text body causes an error
-  // https://github.com/AndrewKeig/express-validation/issues/36
   const postRenderOptions = {
     context: true,
   };
