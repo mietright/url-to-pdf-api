@@ -9,15 +9,19 @@ const config = require('../config');
 function getMimeType(opts) {
   if (opts.output === 'pdf') {
     return 'application/pdf';
-  } else if (opts.output === 'html') {
+  }
+  if (opts.output === 'html') {
     return 'text/html';
   }
 
   const type = _.get(opts, 'screenshot.type');
   switch (type) {
-    case 'png': return 'image/png';
-    case 'jpeg': return 'image/jpeg';
-    default: throw new Error(`Unknown screenshot type: ${type}`);
+    case 'png':
+      return 'image/png';
+    case 'jpeg':
+      return 'image/jpeg';
+    default:
+      throw new Error(`Unknown screenshot type: ${type}`);
   }
 }
 
@@ -25,18 +29,17 @@ const getRender = ex.createRoute((req, res) => {
   const opts = getOptsFromQuery(req.query);
 
   assertOptionsAllowed(opts);
-  return renderCore.render(opts)
-    .then((data) => {
-      if (opts.attachmentName) {
-        res.attachment(opts.attachmentName);
-      }
-      res.set('content-type', getMimeType(opts));
-      if (opts.output === 'html') {
-        res.send(data);
-      } else {
-        res.end(data, 'binary');
-      }
-    });
+  return renderCore.render(opts).then((data) => {
+    if (opts.attachmentName) {
+      res.attachment(opts.attachmentName);
+    }
+    res.set('content-type', getMimeType(opts));
+    if (opts.output === 'html') {
+      res.send(data);
+    } else {
+      res.end(data, 'binary');
+    }
+  });
 });
 
 const postRender = ex.createRoute((req, res) => {
@@ -52,30 +55,32 @@ const postRender = ex.createRoute((req, res) => {
 
   let opts;
   if (isBodyJson) {
-    opts = _.merge({
-      output: 'pdf',
-      screenshot: {
-        type: 'png',
+    opts = _.merge(
+      {
+        output: 'pdf',
+        screenshot: {
+          type: 'png',
+        },
       },
-    }, req.body);
+      req.body,
+    );
   } else {
     opts = getOptsFromQuery(req.query);
     opts.html = req.body;
   }
 
   assertOptionsAllowed(opts);
-  return renderCore.render(opts)
-    .then((data) => {
-      if (opts.attachmentName) {
-        res.attachment(opts.attachmentName);
-      }
-      res.set('content-type', getMimeType(opts));
-      if (opts.output === 'html') {
-        res.send(data);
-      } else {
-        res.end(data, 'binary');
-      }
-    });
+  return renderCore.render(opts).then((data) => {
+    if (opts.attachmentName) {
+      res.attachment(opts.attachmentName);
+    }
+    res.set('content-type', getMimeType(opts));
+    if (opts.output === 'html') {
+      res.send(data);
+    } else {
+      res.end(data, 'binary');
+    }
+  });
 });
 
 function isHostMatch(host1, host2) {
@@ -113,18 +118,21 @@ function isUrlAllowed(inputUrl) {
   const matchInfos = _.map(config.ALLOW_URLS, (urlPattern) => {
     if (_.startsWith(urlPattern, 'host:')) {
       return isHostMatch(urlPattern.split(':')[1], urlParts.host);
-    } else if (_.startsWith(urlPattern, 'regex:')) {
+    }
+    if (_.startsWith(urlPattern, 'regex:')) {
       return isRegexMatch(urlPattern.split(':')[1], inputUrl);
     }
 
     return isNormalizedMatch(urlPattern, inputUrl);
   });
 
-  const isAllowed = _.some(matchInfos, info => info.match);
+  const isAllowed = _.some(matchInfos, (info) => info.match);
   if (!isAllowed) {
     logger.info('The url was not allowed because:');
     _.forEach(matchInfos, (info) => {
-      logger.info(`${info.part1} !== ${info.part2} (with ${info.type} matching)`);
+      logger.info(
+        `${info.part1} !== ${info.part2} (with ${info.type} matching)`,
+      );
     });
   }
 
@@ -137,7 +145,11 @@ function assertOptionsAllowed(opts) {
     ex.throwStatus(403, 'Rendering HTML input is disabled.');
   }
 
-  if (_.isString(opts.url) && config.ALLOW_URLS.length > 0 && !isUrlAllowed(opts.url)) {
+  if (
+    _.isString(opts.url)
+    && config.ALLOW_URLS.length > 0
+    && !isUrlAllowed(opts.url)
+  ) {
     ex.throwStatus(403, 'Url not allowed.');
   }
 }

@@ -1,10 +1,7 @@
 const { Joi } = require('express-validation');
 
 const urlSchema = Joi.string().uri({
-  scheme: [
-    'http',
-    'https',
-  ],
+  scheme: ['http', 'https'],
 });
 
 const cookieSchema = Joi.object({
@@ -129,14 +126,10 @@ const renderBodyObject = Joi.object({
   failEarly: Joi.string(),
 });
 
-const renderBodySchema = Joi.alternatives([
-  Joi.string(),
-  renderBodyObject,
-]);
+const renderBodySchema = Joi.alternatives([Joi.string(), renderBodyObject]);
 
 module.exports = {
   renderQuerySchema,
   renderBodySchema,
   sharedQuerySchema,
 };
-

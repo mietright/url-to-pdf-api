@@ -20,7 +20,7 @@ function createRouter() {
   if (!_.isEmpty(config.API_TOKENS)) {
     logger.info('x-api-key authentication required');
 
-    router.use('/*splat',(req, res, next) => {
+    router.use('/*splat', (req, res, next) => {
       const userToken = req.headers['x-api-key'];
       if (!_.includes(config.API_TOKENS, userToken)) {
         const err = new Error('Invalid API token in x-api-key header.');

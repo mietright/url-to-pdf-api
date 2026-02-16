@@ -1,6 +1,6 @@
 const path = require('path');
 const winston = require('winston');
-const _ = require('lodash');
+
 const config = require('../config');
 
 const COLORIZE = config.NODE_ENV === 'development';
@@ -21,7 +21,7 @@ function createLogger(filePath) {
               timestamp, label, level, message,
             } = info;
             return `${timestamp} [${label}] ${level}: ${message}`;
-          })
+          }),
         ),
       }),
     ],

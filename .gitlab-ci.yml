@@ -99,6 +99,21 @@ yarn audit:
   tags:
     - kubernetes
 
+lint:
+  image:
+    name: $IMAGE_NAME:$DEFAULT_TAG
+  stage: test
+  needs:
+    - build image
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - cd /usr/src/app
+    - yarn install --frozen-lockfile
+    - yarn fmt
+    - yarn lint
+  tags:
+    - kubernetes
 # TAGS IMAGES
 image tag:
   needs:
@@ -106,7 +121,6 @@ image tag:
   extends: .tag-main
   variables:
     SOURCE_TAG: $DEFAULT_TAG
-
 
 deploy-staging:
   needs:

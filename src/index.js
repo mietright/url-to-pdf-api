@@ -1,12 +1,12 @@
-const createApp = require('./app');
 const enableDestroy = require('server-destroy');
+const createApp = require('./app');
 const logger = require('./util/logger')(__filename);
 const config = require('./config');
 
 const app = createApp();
 const server = app.listen(config.PORT, () => {
   logger.info(
-    `Express server listening on http://localhost:${config.PORT}/ in ${app.get('env')} mode`
+    `Express server listening on http://localhost:${config.PORT}/ in ${app.get('env')} mode`,
   );
 });
 enableDestroy(server);
