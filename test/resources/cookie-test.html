@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cookie test</title>
+  </head>
+  <body>
+    <pre id="out">Loading...</pre>
+    <script>
+      (function () {
+        var pairs = document.cookie
+          .split(';')
+          .map(function (s) {
+            return s.trim();
+          })
+          .filter(Boolean);
+        var names = pairs.map(function (p) {
+          return p.split('=')[0].trim();
+        });
+        var lines = ['Number of cookies received: ' + names.length];
+        names.forEach(function (name) {
+          lines.push('Cookie named ' + name);
+        });
+        document.getElementById('out').textContent = lines.join('\n');
+      })();
+    </script>
+  </body>
+</html>

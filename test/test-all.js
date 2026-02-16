@@ -2,6 +2,7 @@
 
 const chai = require('chai');
 const fs = require('fs');
+const http = require('http');
 const request = require('supertest');
 const { PDFParse } = require('pdf-parse');
 const { getResource } = require('./util');
@@ -62,8 +63,9 @@ describe('POST /api/render', () => {
       .set('content-type', 'application/json')
       .expect(400));
 
-  it('render github.com should succeed', () =>
-    request(app)
+  it('render github.com should succeed', function renderGithubComShouldSucceed() {
+    this.timeout(30000);
+    return request(app)
       .post('/api/render')
       .send({ url: 'https://github.com' })
       .set('content-type', 'application/json')
@@ -73,7 +75,8 @@ describe('POST /api/render', () => {
       .then((response) => {
         const length = Number(response.headers['content-length']);
         chai.expect(length).to.be.above(1024 * 40);
-      }));
+      });
+  });
 
   it('html in json body should succeed', () =>
     request(app)
@@ -131,48 +134,64 @@ describe('POST /api/render', () => {
         chai.expect(length).to.be.above(30 * 1024 * 1);
       }));
 
-  it('cookies should exist on the page', () =>
-    request(app)
-      .post('/api/render')
-      .send({
-        url: 'http://www.html-kit.com/tools/cookietester/',
-        cookies: [
-          {
-            name: 'url-to-pdf-test',
-            value: 'test successful',
-            domain: 'www.html-kit.com',
-          },
-          {
-            name: 'url-to-pdf-test-2',
-            value: 'test successful 2',
-            domain: 'www.html-kit.com',
-          },
-        ],
-      })
-      .set('Connection', 'keep-alive')
-      .set('content-type', 'application/json')
-      .expect(200)
-      .expect('content-type', 'application/pdf')
-      .then((response) => {
-        if (DEBUG) {
-          console.log(response.headers);
-          console.log(response.body);
-          fs.writeFileSync('cookies-pdf.pdf', response.body, {
-            encoding: null,
-          });
-        }
+  it('cookies should exist on the page', async () => {
+    const cookieHtml = getResource('cookie-test.html');
+    const server = http.createServer((req, res) => {
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(cookieHtml);
+    });
+    await new Promise((resolve) => {
+      server.listen(0, '127.0.0.1', resolve);
+    });
+    const { port } = server.address();
+    const baseUrl = `http://127.0.0.1:${port}`;
 
-        return getPdfTextContent(response.body);
-      })
-      .then((text) => {
-        if (DEBUG) {
-          fs.writeFileSync('./cookies-content.txt', text);
-        }
+    try {
+      const response = await request(app)
+        .post('/api/render')
+        .send({
+          url: baseUrl,
+          cookies: [
+            {
+              name: 'url-to-pdf-test',
+              value: 'test successful',
+              domain: '127.0.0.1',
+            },
+            {
+              name: 'url-to-pdf-test-2',
+              value: 'test successful 2',
+              domain: '127.0.0.1',
+            },
+          ],
+        })
+        .set('Connection', 'keep-alive')
+        .set('content-type', 'application/json')
+        .expect(200)
+        .expect('content-type', 'application/pdf');
 
-        chai.expect(text).to.have.string('Number-of-cookies-received-2');
-        chai.expect(text).to.have.string('Cookie-named-url-to-pdf-test');
-        chai.expect(text).to.have.string('Cookie-named-url-to-pdf-test-2');
-      }));
+      if (DEBUG) {
+        console.log(response.headers);
+        console.log(response.body);
+        fs.writeFileSync('cookies-pdf.pdf', response.body, {
+          encoding: null,
+        });
+      }
+
+      const text = await getPdfTextContent(response.body);
+
+      if (DEBUG) {
+        fs.writeFileSync('./cookies-content.txt', text);
+      }
+
+      chai.expect(text).to.have.string('Number-of-cookies-received-2');
+      chai.expect(text).to.have.string('Cookie-named-url-to-pdf-test');
+      chai.expect(text).to.have.string('Cookie-named-url-to-pdf-test-2');
+    } finally {
+      await new Promise((resolve) => {
+        server.close(resolve);
+      });
+    }
+  });
 
   it('special characters should be rendered correctly', () =>
     request(app)
