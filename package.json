@@ -2,9 +2,6 @@
   "name": "url-to-pdf-api",
   "version": "1.0.0",
   "description": "Web page PDF rendering done right. Packaged to an easy API.",
-  "resolutions": {
-    "diff": "^8.0.3"
-  },
   "overrides": {
     "diff": "^8.0.3"
   },
@@ -48,7 +45,10 @@
     "puppeteer": "^24.37.2",
     "regenerator-runtime": "^0.14.1",
     "server-destroy": "^1.0.1",
-    "winston": "^3.19.0"
+    "winston": "^3.19.0",
+    "minimatch": "^10.2.2",
+    "@isaacs/brace-expansion": ">=5.0.1",
+    "tar": "^7.5.9"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.6",
@@ -69,5 +69,11 @@
     "nodemon": "^3.1.11",
     "supertest": "^7.2.2",
     "prettier": "^3.8.1"
+  },
+  "resolutions": {
+    "diff": "^8.0.3",
+    "minimatch": "^10.2.2",
+    "@isaacs/brace-expansion": ">=5.0.1",
+    "tar": "^7.5.9"
   }
 }
