@@ -13,14 +13,13 @@ function createErrorResponder(_opts) {
   );
 
   // 4 params needed for Express to know it's a error handler middleware
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-unused-vars
   return function errorResponder(err, req, res, next) {
     let message;
     const status = err.status || err.statusCode || 500;
 
     const httpMessage = http.STATUS_CODES[status];
     if (opts.isErrorSafeToRespond(status)) {
-      // eslint-disable-next-line
       message = err.message;
     } else {
       message = httpMessage;

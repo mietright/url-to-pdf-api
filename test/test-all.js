@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 const chai = require('chai');
 const fs = require('fs');
 const http = require('http');
