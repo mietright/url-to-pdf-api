@@ -46,6 +46,7 @@ const config = [
       'function-paren-newline': 'off',
     },
   },
+  { ignores: ['dist/**', 'node_modules/**'] },
 ];
 
 module.exports = config;
