@@ -74,7 +74,7 @@ trivy-misconfig:
   extends: .trivy-misconfig
   variables:
     TRIVY_SEVERITY: 'HIGH,CRITICAL'
-  allow_failure: true
+  allow_failure: false
 # 3. License Scanner
 trivy-license:
   extends: .trivy-license
