@@ -57,4 +57,10 @@ RUN yarn build
 
 EXPOSE 9000
 
+RUN addgroup -g 1001 appgroup && \
+    adduser -D -u 1001 -G appgroup appuser && \
+    chown -R appuser:appgroup /usr/src/app
+
+USER appuser
+
 CMD [ "dumb-init", "node", "dist/index.js" ]
