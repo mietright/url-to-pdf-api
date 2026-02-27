@@ -1371,9 +1371,9 @@
     "@types/node" "*"
 
 "@typescript-eslint/types@^8.56.0":
-  version "8.56.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-8.56.0.tgz#a2444011b9a98ca13d70411d2cbfed5443b3526a"
-  integrity sha512-DBsLPs3GsWhX5HylbP9HNG15U0bnwut55Lx12bHB9MpXxQ+R5GC8MwQe+N1UFXxAeQDvEsEDY6ZYwX03K7Z6HQ==
+  version "8.56.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-8.56.1.tgz#975e5942bf54895291337c91b9191f6eb0632ab9"
+  integrity sha512-dbMkdIUkIkchgGDIv7KLUpa0Mda4IYjo4IAMJUZ+3xNoUXxMsk9YtKpTHSChRS85o+H9ftm51gsK1dZReY9CVw==
 
 accepts@^2.0.0:
   version "2.0.0"
@@ -1722,9 +1722,9 @@ body-parser@^2.2.1, body-parser@^2.2.2:
     type-is "^2.0.1"
 
 brace-expansion@^5.0.2:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-5.0.3.tgz#6a9c6c268f85b53959ec527aeafe0f7300258eef"
-  integrity sha512-fy6KJm2RawA5RcHkLa1z/ScpBeA762UF9KmZQxwIbDtRJrgLzM10depAiEQ+CXYcoiqW1/m96OAAoke2nE9EeA==
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-5.0.4.tgz#614daaecd0a688f660bbbc909a8748c3d80d4336"
+  integrity sha512-h+DEnpVvxmfVefa4jFbCf5HdH5YMDXRsmKflpf1pILZWRFlTbJpxeU55nJl4Smt5HQaGzg1o6RHFPJaOqnmBDg==
   dependencies:
     balanced-match "^4.0.2"
 
@@ -2422,9 +2422,9 @@ eslint-config-prettier@^10.1.8:
   integrity sha512-82GZUjRS0p/jganf6q1rEO25VSoHH0hKPCTrgillPjdI/3bgBhAE1QzHrHTizjpRvy6pGAvKjDJtk2pF9NDq8w==
 
 eslint-flat-config-airbnb@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/eslint-flat-config-airbnb/-/eslint-flat-config-airbnb-2.0.4.tgz#ae10b0be122b65c016c9db1b4bd890a5411f2914"
-  integrity sha512-cSE7X+GovFY5GhaLmrUzPoPInOLpsl9lV8lKDtGBgJUXwzcEmKb12Cczn+CCyw3OIsIKSMQ/jE3RzD9l+jdUMQ==
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/eslint-flat-config-airbnb/-/eslint-flat-config-airbnb-2.0.5.tgz#75c4783e92ccfafb321839f2666bc9cf8260a44f"
+  integrity sha512-WpoZTXYIJVnQRdVHE/AOP6m/ajOM0OaTyzFZq98Rzd07gaco4hTymU50emFoeRZ9i92v1p64O+mwcFpIUsXJZA==
   dependencies:
     "@stylistic/eslint-plugin" "^5.3.1"
     confusing-browser-globals "^1.0.11"
