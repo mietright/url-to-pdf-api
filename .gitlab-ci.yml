@@ -25,6 +25,8 @@ cache:
 
 variables:
   IMAGE_REPO_NAME: conny/printer
+  APP: printer
+
   ### Printer
   NODE_ENV: development
   PORT: 9000
