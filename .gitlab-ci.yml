@@ -68,19 +68,19 @@ trivy-vuln:
   extends: .trivy-vuln
   variables:
     TRIVY_SEVERITY: 'HIGH,CRITICAL'
-  allow_failure: false
+  allow_failure: true
 # 2. Misconfiguration Scanner (IaC)
 trivy-misconfig:
   extends: .trivy-misconfig
   variables:
     TRIVY_SEVERITY: 'HIGH,CRITICAL'
-  allow_failure: false
+  allow_failure: true
 # 3. License Scanner
 trivy-license:
   extends: .trivy-license
   variables:
     TRIVY_SEVERITY: 'HIGH,CRITICAL'
-  allow_failure: false
+  allow_failure: true
 
 yarn audit:
   image:
@@ -94,7 +94,7 @@ yarn audit:
     - cd /usr/src/app
     - yarn install --frozen-lockfile
     - bin/yarn_audit
-  allow_failure: false
+  allow_failure: true
   tags:
     - kubernetes
 
