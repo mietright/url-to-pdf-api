@@ -1,4 +1,4 @@
-FROM node:24.13-alpine
+FROM node:24.14-alpine
 
 RUN apk add --no-cache \
       bash \
