@@ -56,3 +56,5 @@ jspm_packages
 
 /bin/*
 !/bin/yarn_audit
+
+.env-cmdrc.json
