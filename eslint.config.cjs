@@ -46,7 +46,7 @@ const config = [
       'function-paren-newline': 'off',
     },
   },
-  { ignores: ['dist/**', 'node_modules/**'] },
+  { ignores: ['dist/**', 'node_modules/**', 'newrelic.cjs'] },
 ];
 
 module.exports = config;

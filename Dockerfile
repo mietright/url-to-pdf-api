@@ -63,4 +63,4 @@ RUN addgroup -g 1001 appgroup && \
 
 USER appuser
 
-CMD [ "dumb-init", "node", "dist/index.js" ]
+CMD [ "dumb-init", "node", "-r", "newrelic", "dist/index.js" ]
