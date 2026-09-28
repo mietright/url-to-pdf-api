@@ -1261,7 +1261,7 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/api/-/api-1.9.1.tgz#c1b0346de336ba55af2d5a7970882037baedec05"
   integrity sha512-gLyJlPHPZYdAk1JENA9LeHejZe1Ti77/pTeFm/nMXmQH/HFZlcS/O2XJB+L8fkbrNSqhdtlvjBVjxwUYanNH5Q==
 
-"@opentelemetry/core@2.10.0", "@opentelemetry/core@^2.0.0":
+"@opentelemetry/core@2.10.0":
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/core/-/core-2.10.0.tgz#aa77f7138e74ba5399d5f3bb0deade0c168f00b2"
   integrity sha512-/wNZ8twnEQQA4HoHu22+vcsdru6pWPWxW+7w+FlxT6Id7PE/WIbZmVKkte+PF72e0F2dnImFeHD2syyE1Mw6MQ==
@@ -4125,10 +4125,10 @@ negotiator@~0.6.4:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.4.tgz#777948e2452651c570b712dd01c23e262713fff7"
   integrity sha512-myRT3DiWPHqho5PrJaIRyaMv2kgYf0mUVgBNOYMuCH5Ki1yEiQaf/ZJuQ62nvpc44wL5WDbTX7yGJi1Neevw8w==
 
-newrelic@^14.3.8:
-  version "14.3.8"
-  resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-14.3.8.tgz#00151ca884efef61f0913c4ef8c8b393fbeaba7d"
-  integrity sha512-dqIKKDiOK0VBUbC69n/lFCvR/wYGIHsG3uEf/qJRYmZls/9f+56RpJupwHVApBESotiojcJRtdbuJeMUm8D6uQ==
+newrelic@^14.5.1:
+  version "14.5.1"
+  resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-14.5.1.tgz#20bafd1078a2d9b97ae19773910b6f82af805ec4"
+  integrity sha512-HOb0dOvVCCgUkMAER9HmhmpGPditNOInrUwMWIQAESCwKgNnXSk9SqK5tau3Xfs7dByFpeW/OsmA+RDufA3zEg==
   dependencies:
     "@apm-js-collab/tracing-hooks" "^0.13.0"
     "@grpc/grpc-js" "^1.13.2"
@@ -4136,7 +4136,6 @@ newrelic@^14.3.8:
     "@newrelic/security-agent" "^3.0.0"
     "@opentelemetry/api" "^1.9.0"
     "@opentelemetry/api-logs" "^0.221.0"
-    "@opentelemetry/core" "^2.0.0"
     "@opentelemetry/exporter-metrics-otlp-http" "^0.221.0"
     "@opentelemetry/otlp-exporter-base" "^0.221.0"
     "@opentelemetry/otlp-transformer" "^0.221.0"
