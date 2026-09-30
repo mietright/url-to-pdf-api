@@ -24,7 +24,9 @@ cache:
     - /opt/gitlab/cache/image-cache
 
 variables:
+  OCI_REPO: img.conny.dev
   IMAGE_REPO_NAME: conny/printer
+  IMAGE_NAME: $OCI_REPO/$IMAGE_REPO_NAME
   APP: printer
 
   ### Printer
